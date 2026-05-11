@@ -1,0 +1,21 @@
+[package]
+name = "koas-server"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "koas-server"
+path = "src/main.rs"
+
+[dependencies]
+koas-errors = { path = "../koas-errors" }
+koas-database = { path = "../koas-database" }
+koas-servers = { path = "../koas-servers" }
+koas-proxy = { path = "../koas-proxy" }
+axum = { workspace = true }
+tokio = { workspace = true }
+tower-http = { version = "0.6", features = ["cors", "trace", "fs"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+reqwest = { workspace = true }
+dotenvy = { workspace = true }

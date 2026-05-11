@@ -1,0 +1,14 @@
+[package]
+name = "koas-proxy"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+koas-errors = { path = "../koas-errors" }
+koas-servers = { path = "../koas-servers" }
+axum = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+uuid = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
