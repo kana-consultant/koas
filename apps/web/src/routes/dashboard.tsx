@@ -86,7 +86,7 @@ export function DashboardPage() {
                   ['Uptime', uptime(sys.uptime_seconds)],
                   ['OS Family', sys.os_family],
                 ].map(([k, v]) => (
-                  <div key={k} className='rounded-xl p-2.5' style={{ background: 'var(--bg-elevated)' }}>
+                  <div key={k} className='rounded-2xl p-2.5' style={{ background: 'var(--bg-elevated)' }}>
                     <p style={{ color: 'var(--text-muted)' }}>{k}</p>
                     <p className='font-semibold mt-0.5' style={{ color: 'var(--text)' }}>{v}</p>
                   </div>
@@ -103,7 +103,7 @@ export function DashboardPage() {
             </div>
           ) : (
             <div className='space-y-2'>
-              {[1,2,3].map((i) => <div key={i} className='h-8 animate-pulse rounded-xl' style={{ background: 'var(--bg-elevated)' }} />)}
+              {[1,2,3].map((i) => <div key={i} className='h-8 animate-pulse rounded-2xl' style={{ background: 'var(--bg-elevated)' }} />)}
             </div>
           )}
         </Card>
@@ -117,7 +117,7 @@ export function DashboardPage() {
                 .filter((s) => s.active_state === 'failed')
                 .slice(0, 5)
                 .map((s) => (
-                  <div key={s.name} className='flex items-center justify-between rounded-xl px-3 py-2.5' style={{ background: 'var(--bg-elevated)' }}>
+                  <div key={s.name} className='flex items-center justify-between rounded-2xl px-3 py-2.5' style={{ background: 'var(--bg-elevated)' }}>
                     <span className='font-mono text-xs font-medium' style={{ color: 'var(--text)' }}>{s.name}</span>
                     <Badge status='failed' label={s.sub_state} />
                   </div>
@@ -142,7 +142,7 @@ export function DashboardPage() {
           {(machines as any[])?.length > 0 ? (
             <div className='space-y-2'>
               {(machines as any[]).slice(0, 5).map((m: any) => (
-                <div key={m.id} className='flex items-center gap-3 rounded-xl px-3 py-2.5' style={{ background: 'var(--bg-elevated)' }}>
+                <div key={m.id} className='flex items-center gap-3 rounded-2xl px-3 py-2.5' style={{ background: 'var(--bg-elevated)' }}>
                   <div className='h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold' style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}>
                     {(m.name?.[0] ?? 'M').toUpperCase()}
                   </div>

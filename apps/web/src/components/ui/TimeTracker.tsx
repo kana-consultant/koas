@@ -28,8 +28,8 @@ export function TimeTracker({ className = '' }: TimeTrackerProps) {
 
   return (
     <div
-      className={`rounded-2xl p-5 flex flex-col justify-between ${className}`}
-      style={{ background: 'var(--accent)', minHeight: '140px' }}
+      className={`p-5 flex flex-col justify-between ${className}`}
+      style={{ background: 'var(--accent)', minHeight: '140px', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}
     >
       <p className='text-sm font-semibold' style={{ color: 'rgba(255,255,255,0.75)' }}>Time Tracker</p>
 

@@ -66,33 +66,44 @@ export function AppLayout() {
     .find((n) => isActive(n.path))?.label ?? 'koas'
 
   return (
-    <div className='flex h-screen overflow-hidden' style={{ background: 'var(--bg)' }}>
+    <div className='flex h-screen gap-6 p-6 overflow-hidden' style={{ background: 'var(--bg)' }}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className='fixed inset-0 z-20 bg-black/30 lg:hidden' onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — floating island */}
       <aside
         className={[
-          'fixed inset-y-0 left-0 z-30 flex w-60 flex-col transition-transform duration-200 lg:static lg:translate-x-0',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+          'fixed inset-y-6 left-6 z-30 flex w-56 flex-col transition-transform duration-200 lg:static lg:inset-auto lg:translate-x-0',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+24px)]',
         ].join(' ')}
-        style={{ background: 'var(--bg-sidebar)', borderRight: '1px solid var(--border)' }}
+        style={{
+          background: 'var(--bg-surface)',
+          borderRadius: 'var(--radius-island)',
+          boxShadow: 'var(--shadow-island)',
+        }}
       >
         {/* Logo */}
-        <div className='flex h-16 items-center gap-2.5 px-5' style={{ borderBottom: '1px solid var(--border)' }}>
-          <div className='flex h-8 w-8 items-center justify-center rounded-xl' style={{ background: 'var(--accent-soft)' }}>
-            <Cpu className='size-4' style={{ color: 'var(--accent)' }} />
+        <div className='flex shrink-0 items-center gap-3 px-5 pt-5 pb-4'>
+          <div
+            className='flex h-9 w-9 items-center justify-center rounded-xl shrink-0'
+            style={{ background: 'var(--accent)' }}
+          >
+            <Cpu className='size-4.5' style={{ color: '#fff' }} />
           </div>
-          <span className='text-base font-bold tracking-tight' style={{ color: 'var(--text)' }}>koas</span>
-          <button className='ml-auto lg:hidden' onClick={() => setSidebarOpen(false)}>
+          <div className='flex-1 min-w-0'>
+            <p className='text-base font-bold tracking-tight leading-none' style={{ color: 'var(--text)' }}>koas</p>
+            <p className='text-[10px] mt-0.5 font-medium' style={{ color: 'var(--text-muted)' }}>Server Management</p>
+          </div>
+          <button className='lg:hidden shrink-0' onClick={() => setSidebarOpen(false)}>
             <X className='size-4' style={{ color: 'var(--text-muted)' }} />
           </button>
         </div>
+        <div className='mx-5 mb-1' style={{ height: '1px', background: 'var(--border)' }} />
 
         {/* Nav */}
-        <nav className='flex-1 overflow-y-auto px-3 py-5 space-y-5'>
+        <nav className='flex-1 overflow-y-auto px-3 py-4 space-y-5'>
           <div>
             <p className='mb-2 px-3 text-[10px] font-bold uppercase tracking-widest' style={{ color: 'var(--text-muted)' }}>Menu</p>
             {NAV_MAIN.map((item) => <NavItem key={item.path} {...item} />)}
@@ -124,26 +135,33 @@ export function AppLayout() {
         )}
       </aside>
 
-      {/* Main */}
-      <div className='flex flex-1 flex-col overflow-hidden min-w-0'>
-        {/* Topbar */}
+      {/* Right column */}
+      <div className='flex flex-1 flex-col gap-3 overflow-hidden min-w-0'>
+        {/* Topbar — floating island */}
         <header
-          className='flex h-16 items-center gap-4 px-6'
-          style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-surface)' }}
+          className='flex h-16 shrink-0 items-center gap-4 px-5'
+          style={{
+            background: 'var(--bg-surface)',
+            borderRadius: 'var(--radius-island)',
+            boxShadow: 'var(--shadow-island)',
+          }}
         >
           <button className='lg:hidden shrink-0' onClick={() => setSidebarOpen(true)}>
             <Menu className='size-5' style={{ color: 'var(--text-muted)' }} />
           </button>
 
-          <SearchInput
-            value={search}
-            onChange={setSearch}
-            placeholder='Search…'
-            shortcut='⌘F'
-            className='max-w-xs flex-1'
-          />
+          <h1 className='text-lg font-bold tracking-tight hidden lg:block' style={{ color: 'var(--text)' }}>
+            {currentLabel}
+          </h1>
 
           <div className='ml-auto flex items-center gap-2'>
+            <SearchInput
+              value={search}
+              onChange={setSearch}
+              placeholder='Search…'
+              shortcut='⌘F'
+              className='max-w-xs'
+            />
             {[Mail, Bell].map((Icon, i) => (
               <button
                 key={i}
@@ -171,11 +189,8 @@ export function AppLayout() {
           </div>
         </header>
 
-        {/* Page */}
-        <main className='flex-1 overflow-y-auto p-6'>
-          <div className='mb-5'>
-            <h1 className='text-2xl font-bold tracking-tight' style={{ color: 'var(--text)' }}>{currentLabel}</h1>
-          </div>
+        {/* Page content */}
+        <main className='flex-1 overflow-y-auto'>
           <Outlet />
         </main>
       </div>
