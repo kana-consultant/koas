@@ -4,9 +4,9 @@ target/
 Cargo.lock
 
 # Node / frontend
-web/node_modules/
-web/dist/
-web/.vite/
+apps/web/node_modules/
+apps/web/dist/
+apps/web/.vite/
 
 # Runtime data
 *.json.bak
@@ -21,3 +21,4 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+/web/

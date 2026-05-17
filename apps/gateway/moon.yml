@@ -1,0 +1,30 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+project:
+  name: 'gateway'
+  description: 'koas HTTP gateway — Axum server binary'
+  language: 'rust'
+  type: 'application'
+
+tasks:
+  check:
+    command: 'cargo check -p koas-server'
+    deps:
+      - 'api:check'
+
+  build:
+    command: 'cargo build --bin koas'
+    deps:
+      - 'api:build'
+
+  dev:
+    command: 'cargo run --bin koas'
+    deps:
+      - 'api:build'
+    options:
+      persistent: true
+
+  clippy:
+    command: 'cargo clippy -p koas-server -- -D warnings'
+    deps:
+      - 'api:clippy'

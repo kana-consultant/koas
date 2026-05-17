@@ -62,7 +62,7 @@ export function ServiceDetailPage() {
 
       <div className='grid gap-4 lg:grid-cols-2'>
         {/* Status card */}
-        <div className='rounded-xl p-5' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+        <div className='p-5' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
           <div className='mb-4 flex items-center justify-between'>
             <h3 className='text-sm font-semibold' style={{ color: 'var(--text)' }}>Status</h3>
             {s && badge(s.active_state)}
@@ -106,7 +106,7 @@ export function ServiceDetailPage() {
         </div>
 
         {/* Logs */}
-        <div className='rounded-xl p-5' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+        <div className='p-5' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
           <h3 className='mb-3 text-sm font-semibold' style={{ color: 'var(--text)' }}>Recent logs</h3>
           <div
             className='overflow-y-auto rounded-lg p-3 font-mono text-[11px] leading-relaxed'

@@ -113,7 +113,7 @@ export function AppLayout() {
 
         {/* System info pill */}
         {sysInfo && (
-          <div className='mx-3 mb-4 rounded-2xl p-4' style={{ background: 'var(--accent)', color: '#fff' }}>
+          <div className='mx-3 mb-4 p-4' style={{ background: 'var(--accent)', color: '#fff', borderRadius: 'var(--radius-island)' }}>
             <div className='flex items-center gap-2 mb-2'>
               <Server className='size-3.5 opacity-70' />
               <span className='text-[11px] font-semibold opacity-70 uppercase tracking-wider'>Local System</span>

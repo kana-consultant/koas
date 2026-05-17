@@ -46,7 +46,7 @@ export function ServicesPage() {
       </div>
 
       {/* Table */}
-      <div className='overflow-x-auto rounded-2xl' style={{ border: '1px solid var(--border)', background: 'var(--bg-surface)' }}>
+      <div className='overflow-x-auto' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
         <table className='w-full text-sm'>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-elevated)' }}>

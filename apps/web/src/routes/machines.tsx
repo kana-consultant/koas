@@ -47,7 +47,7 @@ export function MachinesPage() {
       {isLoading ? (
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className='rounded-xl p-5' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+            <div key={i} className='p-5' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
               <div className='h-5 w-2/3 animate-pulse rounded' style={{ background: 'var(--bg-elevated)' }} />
               <div className='mt-2 h-4 w-1/2 animate-pulse rounded' style={{ background: 'var(--bg-elevated)' }} />
               <div className='mt-4 h-4 w-1/3 animate-pulse rounded' style={{ background: 'var(--bg-elevated)' }} />
@@ -55,7 +55,7 @@ export function MachinesPage() {
           ))}
         </div>
       ) : list.length === 0 ? (
-        <div className='flex flex-col items-center justify-center rounded-xl py-20' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+        <div className='flex flex-col items-center justify-center py-20' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
           <Server className='mb-3 size-10' style={{ color: 'var(--text-muted)' }} />
           <p className='font-medium' style={{ color: 'var(--text)' }}>No machines yet</p>
           <p className='mt-1 text-sm' style={{ color: 'var(--text-muted)' }}>Add an SSH machine to get started</p>
@@ -71,7 +71,7 @@ export function MachinesPage() {
       ) : (
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {list.map((m: any) => (
-            <div key={m.id} className='rounded-xl p-5' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+            <div key={m.id} className='p-5' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
               <div className='flex items-start justify-between gap-2'>
                 <div className='flex items-center gap-3'>
                   <div className='flex h-9 w-9 items-center justify-center rounded-lg' style={{ background: 'var(--bg-elevated)' }}>

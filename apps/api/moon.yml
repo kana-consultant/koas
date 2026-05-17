@@ -1,0 +1,21 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+project:
+  name: 'api'
+  description: 'koas API library — hexagonal architecture domain/application/infrastructure/presentation'
+  language: 'rust'
+  type: 'library'
+
+tasks:
+  check:
+    command: 'cargo check -p koas-api'
+    options:
+      runInCI: true
+
+  build:
+    command: 'cargo build -p koas-api'
+
+  clippy:
+    command: 'cargo clippy -p koas-api -- -D warnings'
+    options:
+      runInCI: true

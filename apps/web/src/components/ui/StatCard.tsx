@@ -12,10 +12,11 @@ export function StatCard({ label, value, trend, dark, onClick }: StatCardProps) 
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl p-5 flex flex-col justify-between min-h-[140px] ${onClick ? 'cursor-pointer' : ''}`}
+      className={`p-5 flex flex-col justify-between min-h-[140px] ${onClick ? 'cursor-pointer' : ''}`}
       style={{
         background: dark ? 'var(--accent)' : 'var(--bg-surface)',
-        border: dark ? 'none' : '1px solid var(--border)',
+        borderRadius: 'var(--radius-island)',
+        boxShadow: 'var(--shadow-island)',
       }}
     >
       <div className='flex items-start justify-between gap-2'>
@@ -47,15 +48,11 @@ export function StatCard({ label, value, trend, dark, onClick }: StatCardProps) 
         {trend && (
           <p
             className='mt-2 flex items-center gap-1.5 text-xs font-medium'
-            style={{
-              color: dark ? 'rgba(255,255,255,0.7)' : 'var(--success)',
-            }}
+            style={{ color: dark ? 'rgba(255,255,255,0.7)' : 'var(--success)' }}
           >
             <span
               className='inline-flex items-center justify-center rounded-md px-1.5 py-0.5'
-              style={{
-                background: dark ? 'rgba(255,255,255,0.15)' : 'var(--success-soft)',
-              }}
+              style={{ background: dark ? 'rgba(255,255,255,0.15)' : 'var(--success-soft)' }}
             >
               ↑
             </span>

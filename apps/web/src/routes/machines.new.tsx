@@ -61,7 +61,7 @@ export function AddMachinePage() {
         Back to machines
       </button>
 
-      <div className='rounded-xl p-6' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
+      <div className='p-6' style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-island)', boxShadow: 'var(--shadow-island)' }}>
         <h2 className='mb-5 text-base font-semibold' style={{ color: 'var(--text)' }}>Add SSH machine</h2>
 
         <form onSubmit={handleSubmit} className='space-y-4'>

@@ -1,0 +1,21 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+project:
+  name: 'web'
+  description: 'koas frontend — React + Vite'
+  language: 'typescript'
+  type: 'application'
+
+tasks:
+  dev:
+    command: 'pnpm dev'
+    options:
+      persistent: true
+
+  build:
+    command: 'pnpm build'
+    outputs:
+      - 'dist'
+
+  typecheck:
+    command: 'pnpm tsc --noEmit'

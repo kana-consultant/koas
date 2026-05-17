@@ -1,0 +1,11 @@
+$schema: 'https://moonrepo.dev/schemas/toolchain.json'
+
+node:
+  version: '22.14.0'
+  packageManager: 'pnpm'
+  pnpm:
+    version: '9.15.4'
+
+rust:
+  edition: '2024'
+  syncToolchain: true
