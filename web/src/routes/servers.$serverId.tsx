@@ -135,7 +135,7 @@ function ResourcesSection({ data, isLoading }: { data: ReturnType<typeof useReso
           value={fmt(data.memory_used)}
           sub={`of ${fmt(data.memory_total)} · ${data.memory_percent.toFixed(1)}% used`}
           icon={Database}
-          accent='bg-info/10 text-info'
+          accent='bg-primary/10 text-primary'
         />
         <StatBlock
           label='Disk'
