@@ -2,10 +2,7 @@ import { createRouter, createRoute, createRootRoute } from '@tanstack/react-rout
 import { AppLayout } from './components/layout/AppLayout'
 import { IndexPage } from './routes/index'
 import { NewServerPage } from './routes/servers.new'
-import { ServerLayout } from './routes/servers.$serverId'
-import { ServicesPage } from './routes/servers.$serverId.services'
-import { PortsPage } from './routes/servers.$serverId.ports'
-import { ResourcesPage } from './routes/servers.$serverId.resources'
+import { ServerPage } from './routes/servers.$serverId'
 
 const rootRoute = createRootRoute({ component: AppLayout })
 
@@ -24,32 +21,10 @@ const newServerRoute = createRoute({
 const serverRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/servers/$serverId',
-  component: ServerLayout,
+  component: ServerPage,
 })
 
-const servicesRoute = createRoute({
-  getParentRoute: () => serverRoute,
-  path: '/services',
-  component: ServicesPage,
-})
-
-const portsRoute = createRoute({
-  getParentRoute: () => serverRoute,
-  path: '/ports',
-  component: PortsPage,
-})
-
-const resourcesRoute = createRoute({
-  getParentRoute: () => serverRoute,
-  path: '/resources',
-  component: ResourcesPage,
-})
-
-const routeTree = rootRoute.addChildren([
-  indexRoute,
-  newServerRoute,
-  serverRoute.addChildren([servicesRoute, portsRoute, resourcesRoute]),
-])
+const routeTree = rootRoute.addChildren([indexRoute, newServerRoute, serverRoute])
 
 export const router = createRouter({ routeTree })
 

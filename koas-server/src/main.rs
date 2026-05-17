@@ -29,7 +29,7 @@ async fn main() {
         .init();
 
     let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "sqlite://./koas.db".to_string());
+        .unwrap_or_else(|_| "sqlite:./koas.db".to_string());
     let port = std::env::var("PORT")
         .unwrap_or_else(|_| "3000".to_string())
         .parse::<u16>()

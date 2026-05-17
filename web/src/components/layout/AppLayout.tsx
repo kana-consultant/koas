@@ -1,27 +1,70 @@
-import { Link, Outlet, useRouterState } from '@tanstack/react-router'
+import { Outlet, useNavigate, useParams, useRouterState } from '@tanstack/react-router'
+import { DashboardShell, Sidebar, TopBar, Button } from '@kana-consultant/ui-kit'
+import { Server, Plus, Trash2 } from 'lucide-react'
+import { useDeleteServer, useServers } from '@/apis/servers'
 
 export function AppLayout() {
-  const isLoading = useRouterState({ select: (s) => s.isLoading })
+  const navigate = useNavigate()
+  const { data } = useServers()
+  const { mutate: deleteServer } = useDeleteServer()
+
+  const params = useParams({ strict: false }) as { serverId?: string }
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+
+  const servers = data?.data ?? []
+  const activeId = params.serverId ?? (pathname === '/servers/new' ? '__new' : '')
+  const activeServer = servers.find((s) => s.id === activeId)
+
+  const navItems = servers.map((s) => ({
+    id: s.id,
+    label: s.name,
+    icon: Server,
+  }))
+
+  const secondaryItems = [{ id: '__new', label: 'Add server', icon: Plus }]
+
+  const handleNavigate = (id: string) => {
+    if (id === '__new') {
+      navigate({ to: '/servers/new' })
+    } else {
+      navigate({ to: '/servers/$serverId', params: { serverId: id } })
+    }
+  }
+
+  const topBarActions = activeServer ? (
+    <Button
+      variant='destructive'
+      size='sm'
+      leadingIcon={<Trash2 />}
+      onClick={() => {
+        deleteServer(activeServer.id, {
+          onSuccess: () => navigate({ to: '/' }),
+        })
+      }}
+    >
+      Remove
+    </Button>
+  ) : undefined
 
   return (
-    <div className="min-h-screen bg-zinc-950 font-mono text-zinc-100">
-      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur">
-        <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-6">
-          <Link to="/" className="text-sm font-medium tracking-widest text-zinc-100 hover:text-white">
-            koas
-          </Link>
-          <div className="flex items-center gap-1">
-            {isLoading && (
-              <span className="h-1 w-1 animate-pulse rounded-full bg-emerald-400" />
-            )}
-            <span className="text-xs text-zinc-600">v0.1.0</span>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-6 py-8">
-        <Outlet />
-      </main>
-    </div>
+    <DashboardShell
+      sidebar={
+        <Sidebar
+          items={navItems}
+          secondaryItems={secondaryItems}
+          activeId={activeId}
+          onNavigate={handleNavigate}
+        />
+      }
+      topBar={
+        <TopBar
+          title={pathname === '/servers/new' ? 'Add server' : (activeServer?.name ?? 'koas')}
+          subtitle={activeServer ? `${activeServer.host}:${activeServer.port}` : 'VPS Orchestrator'}
+          actions={topBarActions}
+        />
+      }
+    >
+      <Outlet />
+    </DashboardShell>
   )
 }

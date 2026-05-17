@@ -10,7 +10,7 @@ services:
       - koas
     environment:
       PORT: "3000"
-      DATABASE_URL: sqlite:///data/koas.db
+      DATABASE_URL: sqlite:/data/koas.db
     volumes:
       - orchestrator-data:/data
     tmpfs:
