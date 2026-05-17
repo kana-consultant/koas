@@ -3,6 +3,18 @@ import { DashboardShell, Sidebar, TopBar, Button } from '@kana-consultant/ui-kit
 import { Server, Plus, Trash2 } from 'lucide-react'
 import { useDeleteServer, useServers } from '@/apis/servers'
 
+function KoasLogo() {
+  return (
+    <svg viewBox='0 0 24 24' fill='none' className='size-5 text-primary-foreground' stroke='currentColor' strokeWidth={1.8}>
+      <rect x='2' y='3' width='20' height='5' rx='1.5' />
+      <rect x='2' y='10' width='20' height='5' rx='1.5' />
+      <rect x='2' y='17' width='20' height='5' rx='1.5' />
+      <circle cx='19' cy='5.5' r='1' fill='currentColor' stroke='none' />
+      <circle cx='19' cy='12.5' r='1' fill='currentColor' stroke='none' />
+    </svg>
+  )
+}
+
 export function AppLayout() {
   const navigate = useNavigate()
   const { data } = useServers()
@@ -50,6 +62,8 @@ export function AppLayout() {
     <DashboardShell
       sidebar={
         <Sidebar
+          logo={<KoasLogo />}
+          brandName='koas'
           items={navItems}
           secondaryItems={secondaryItems}
           activeId={activeId}

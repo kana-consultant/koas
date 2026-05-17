@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { Card, CardContent, Button, Skeleton } from '@kana-consultant/ui-kit'
+import { Button, Skeleton } from '@kana-consultant/ui-kit'
 import { Server, Plus } from 'lucide-react'
 import { useServers } from '@/apis/servers'
 
@@ -20,33 +20,29 @@ export function IndexPage() {
   if (servers.length === 0) {
     return (
       <div className='flex h-full items-center justify-center'>
-        <Card className='w-full max-w-sm text-center'>
-          <CardContent className='flex flex-col items-center gap-4 py-10'>
-            <div className='rounded-full bg-primary/10 p-4'>
-              <Server className='size-8 text-primary' />
-            </div>
-            <div>
-              <p className='font-medium'>No servers yet</p>
-              <p className='mt-1 text-sm text-muted-foreground'>
-                Register your first VPS to start monitoring
-              </p>
-            </div>
-            <Button leadingIcon={<Plus />} onClick={() => navigate({ to: '/servers/new' })}>
-              Add server
-            </Button>
-          </CardContent>
-        </Card>
+        <div className='flex flex-col items-center gap-5 text-center'>
+          <div className='rounded-2xl border border-border bg-surface p-6'>
+            <Server className='size-10 text-primary' />
+          </div>
+          <div>
+            <p className='text-base font-semibold text-foreground'>No servers registered</p>
+            <p className='mt-1 text-sm text-muted-foreground'>
+              Add a VPS running koas-agent to start monitoring
+            </p>
+          </div>
+          <Button leadingIcon={<Plus />} onClick={() => navigate({ to: '/servers/new' })}>
+            Add your first server
+          </Button>
+        </div>
       </div>
     )
   }
 
   return (
     <div className='flex h-full items-center justify-center'>
-      <div className='text-center'>
-        <Server className='mx-auto size-8 text-muted-foreground' />
-        <p className='mt-3 text-sm text-muted-foreground'>
-          Select a server from the sidebar
-        </p>
+      <div className='flex flex-col items-center gap-3 text-center'>
+        <Server className='size-8 text-muted-foreground' />
+        <p className='text-sm text-muted-foreground'>Select a server from the sidebar</p>
       </div>
     </div>
   )
