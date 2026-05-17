@@ -1,0 +1,23 @@
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Node / frontend
+web/node_modules/
+web/dist/
+web/.vite/
+
+# Runtime data
+*.json.bak
+sessions.json
+data/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db

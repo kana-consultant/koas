@@ -1,22 +1,34 @@
-type Variant = 'green' | 'yellow' | 'red' | 'blue' | 'zinc'
+type Status = 'active' | 'inactive' | 'failed' | 'activating' | 'completed' | 'progress' | 'pending' | string
 
-const styles: Record<Variant, string> = {
-  green: 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20',
-  yellow: 'bg-yellow-500/10 text-yellow-400 ring-yellow-500/20',
-  red: 'bg-red-500/10 text-red-400 ring-red-500/20',
-  blue: 'bg-blue-500/10 text-blue-400 ring-blue-500/20',
-  zinc: 'bg-zinc-500/10 text-zinc-400 ring-zinc-500/20',
+const presets: Record<string, { bg: string; color: string }> = {
+  active:     { bg: 'var(--success-soft)',  color: 'var(--success)' },
+  completed:  { bg: 'var(--success-soft)',  color: 'var(--success)' },
+  inactive:   { bg: 'var(--bg-elevated)',   color: 'var(--text-muted)' },
+  failed:     { bg: 'var(--danger-soft)',   color: 'var(--danger)' },
+  pending:    { bg: 'var(--danger-soft)',   color: 'var(--danger)' },
+  activating: { bg: 'var(--warning-soft)',  color: 'var(--warning)' },
+  progress:   { bg: 'var(--warning-soft)',  color: 'var(--warning)' },
+  'in progress': { bg: 'var(--warning-soft)', color: 'var(--warning)' },
 }
 
-type Props = {
-  children: React.ReactNode
-  variant?: Variant
+interface BadgeProps {
+  status: Status
+  dot?: boolean
+  label?: string
 }
 
-export function Badge({ children, variant = 'zinc' }: Props) {
+export function Badge({ status, dot = true, label }: BadgeProps) {
+  const key = status.toLowerCase()
+  const { bg, color } = presets[key] ?? { bg: 'var(--bg-elevated)', color: 'var(--text-muted)' }
+  const text = label ?? status
+
   return (
-    <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-mono ring-1 ring-inset ${styles[variant]}`}>
-      {children}
+    <span
+      className='inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold'
+      style={{ background: bg, color }}
+    >
+      {dot && <span className='h-1.5 w-1.5 rounded-full shrink-0' style={{ background: color }} />}
+      {text}
     </span>
   )
 }
