@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Search, Download, Trash2, ArrowUpCircle, Loader2 } from 'lucide-react'
-import { usePackages, usePackageSearch, useInstallPackage, useRemovePackage, useUpgradePackages } from '@/apis'
+import { usePackages, usePackageSearch, useInstallPackage, useRemovePackage, useUpgradePackages } from './packages/_apis'
 
 export function PackagesPage() {
   const [search, setSearch] = useState('')

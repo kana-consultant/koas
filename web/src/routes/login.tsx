@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Cpu, Eye, EyeOff } from 'lucide-react'
-import { useLogin } from '@/apis'
-import { setToken } from '@/stores/auth'
+import { useLogin } from './login/_apis'
+import { setToken } from '@/libs/auth'
 import { Button } from '@/components/ui'
 
 export function LoginPage() {

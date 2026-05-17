@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Play, Square, RotateCcw, RefreshCw } from 'lucide-react'
-import { useServiceDetail, useServiceAction, useServiceLogs } from '@/apis'
+import { useServiceDetail, useServiceAction, useServiceLogs } from './services.$name/_apis'
 
 function StatRow({ label, value }: { label: string; value: string }) {
   return (

@@ -1,5 +1,6 @@
 import { Video } from 'lucide-react'
-import { useSystemInfo, useSystemServices, useMachines, usePackages } from '@/apis'
+import { useSystemInfo, useSystemServices, useMachines } from './dashboard/_apis'
+import { usePackages } from './packages/_apis'
 import { StatCard, Card, CardHeader, BarChart, ProgressGauge, TimeTracker, Badge, Button } from '@/components/ui'
 
 function uptime(secs: number) {

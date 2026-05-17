@@ -4,8 +4,8 @@ import {
   LayoutDashboard, Server, Package, Activity, LogOut,
   Menu, X, Settings, HelpCircle, Bell, Mail, Cpu,
 } from 'lucide-react'
-import { clearToken } from '@/stores/auth'
-import { useSystemInfo } from '@/apis'
+import { clearToken } from '@/libs/auth'
+import { useSystemInfo } from '@/routes/dashboard/_apis'
 import { SearchInput } from '@/components/ui'
 
 const NAV_MAIN = [

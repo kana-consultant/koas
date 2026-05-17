@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { Play, Square, RotateCcw } from 'lucide-react'
-import { useSystemServices, useServiceAction } from '@/apis'
+import { useSystemServices, useServiceAction } from './services/_apis'
 import { Badge, SearchInput, Button } from '@/components/ui'
 
 export function ServicesPage() {

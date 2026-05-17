@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Loader2, Key, Lock } from 'lucide-react'
-import { useCreateMachine } from '@/apis'
+import { useCreateMachine } from './machines/_apis'
 
 type AuthType = 'password' | 'key'
 

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Plus, Server, Trash2, Wifi, WifiOff, Loader2 } from 'lucide-react'
-import { useMachines, useDeleteMachine, useTestMachine } from '@/apis'
+import { useMachines, useDeleteMachine, useTestMachine } from './machines/_apis'
 
 function statusDot(status: string) {
   const map: Record<string, [string, string]> = {

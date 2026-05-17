@@ -1,5 +1,5 @@
 import { createRouter, createRoute, createRootRoute, redirect } from '@tanstack/react-router'
-import { isAuthenticated } from '@/stores/auth'
+import { isAuthenticated } from '@/libs/auth'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { LoginPage } from '@/routes/login'
 import { DashboardPage } from '@/routes/dashboard'

@@ -1,0 +1,25 @@
+[package]
+name = "koas-api"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+tokio.workspace = true
+axum.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+futures.workspace = true
+async-stream.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+tracing.workspace = true
+regex.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+directories = "6.0"
+russh = { version = "0.60", default-features = false, features = ["ring", "rsa"] }
+home = "0.5"
+rand = "0.8"
+urlencoding = "2.1"
