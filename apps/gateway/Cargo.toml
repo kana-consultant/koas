@@ -7,6 +7,9 @@ edition.workspace = true
 name = "koas"
 path = "src/main.rs"
 
+[features]
+embed-assets = ["rust-embed", "mime_guess"]
+
 [dependencies]
 koas-api.workspace = true
 axum.workspace = true
@@ -17,3 +20,5 @@ serde.workspace = true
 serde_json.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+rust-embed = { workspace = true, optional = true }
+mime_guess = { workspace = true, optional = true }

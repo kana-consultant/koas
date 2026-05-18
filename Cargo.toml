@@ -25,3 +25,12 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 regex = "1.11"
 async-trait = "0.1"
 koas-api = { path = "apps/api" }
+rust-embed = { version = "8", features = ["compression"] }
+mime_guess = "2"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

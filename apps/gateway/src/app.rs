@@ -2,7 +2,6 @@ use axum::{middleware, routing::{delete, get, post, put}, Extension, Router};
 use std::sync::Arc;
 use tower_http::{
     cors::{Any, CorsLayer},
-    services::{ServeDir, ServeFile},
     trace::TraceLayer,
 };
 use koas_api::domain::machine::MachineRepository;
@@ -16,6 +15,42 @@ use koas_api::presentation::{
     },
 };
 use crate::state::AppState;
+
+#[cfg(feature = "embed-assets")]
+mod assets {
+    use rust_embed::RustEmbed;
+
+    #[derive(RustEmbed)]
+    #[folder = "../web/dist"]
+    pub struct Assets;
+}
+
+#[cfg(feature = "embed-assets")]
+async fn static_handler(uri: axum::http::Uri) -> impl axum::response::IntoResponse {
+    use axum::{body::Body, http::{header, StatusCode}, response::Response};
+    let path = uri.path().trim_start_matches('/');
+    let path = if path.is_empty() { "index.html" } else { path };
+
+    match assets::Assets::get(path) {
+        Some(f) => {
+            let mime = mime_guess::from_path(path).first_or_octet_stream();
+            Response::builder()
+                .header(header::CONTENT_TYPE, mime.as_ref())
+                .body(Body::from(f.data))
+                .unwrap()
+        }
+        None => match assets::Assets::get("index.html") {
+            Some(f) => Response::builder()
+                .header(header::CONTENT_TYPE, "text/html")
+                .body(Body::from(f.data))
+                .unwrap(),
+            None => Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Body::empty())
+                .unwrap(),
+        },
+    }
+}
 
 pub fn create_router(state: AppState) -> Router {
     let machine_repo: Arc<dyn MachineRepository> = state.machines.clone();
@@ -43,14 +78,28 @@ pub fn create_router(state: AppState) -> Router {
         .route("/machines/{id}/test", post(test_machine))
         .with_state(machine_repo);
 
-    let static_dir = std::env::var("KOAS_STATIC_DIR").unwrap_or_else(|_| "./static".to_string());
-    let index_file = format!("{}/index.html", static_dir);
-
-    Router::new()
+    #[cfg(feature = "embed-assets")]
+    let router = Router::new()
         .nest("/api", api)
-        .fallback_service(ServeDir::new(&static_dir).not_found_service(ServeFile::new(&index_file)))
+        .fallback(static_handler)
         .layer(middleware::from_fn(auth_middleware))
         .layer(Extension(state.auth))
         .layer(CorsLayer::new().allow_origin(Any).allow_methods(Any).allow_headers(Any))
-        .layer(TraceLayer::new_for_http())
+        .layer(TraceLayer::new_for_http());
+
+    #[cfg(not(feature = "embed-assets"))]
+    let router = {
+        use tower_http::services::{ServeDir, ServeFile};
+        let static_dir = std::env::var("KOAS_STATIC_DIR").unwrap_or_else(|_| "./static".to_string());
+        let index_file = format!("{}/index.html", static_dir);
+        Router::new()
+            .nest("/api", api)
+            .fallback_service(ServeDir::new(&static_dir).not_found_service(ServeFile::new(&index_file)))
+            .layer(middleware::from_fn(auth_middleware))
+            .layer(Extension(state.auth))
+            .layer(CorsLayer::new().allow_origin(Any).allow_methods(Any).allow_headers(Any))
+            .layer(TraceLayer::new_for_http())
+    };
+
+    router
 }
