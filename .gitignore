@@ -4,7 +4,7 @@ target/
 Cargo.lock
 
 # Node / frontend
-apps/web/node_modules/
+node_modules/
 apps/web/dist/
 apps/web/.vite/
 

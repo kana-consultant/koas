@@ -36,7 +36,7 @@ export function AppLayout() {
     return (
       <button
         onClick={() => { navigate({ to: path }); setSidebarOpen(false) }}
-        className='flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all mb-0.5 relative'
+        className='nav-item flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all mb-0.5 relative cursor-pointer'
         style={{
           background: active ? 'var(--accent-soft)' : 'transparent',
           color: active ? 'var(--accent)' : 'var(--text-muted)',
@@ -113,7 +113,7 @@ export function AppLayout() {
             {NAV_GENERAL.map((item) => <NavItem key={item.path} {...item} />)}
             <button
               onClick={() => { clearToken(); navigate({ to: '/login' }) }}
-              className='flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all mb-0.5'
+              className='nav-item flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all mb-0.5 cursor-pointer'
               style={{ color: 'var(--text-muted)' }}
             >
               <LogOut className='size-4 shrink-0' />
