@@ -1,6 +1,16 @@
 import { Video } from 'lucide-react'
-import { useSystemInfo, useSystemServices, useMachines, usePackages } from './dashboard/_apis'
-import { StatCard, Card, CardHeader, BarChart, ProgressGauge, TimeTracker, Badge, Button } from '@/components/ui'
+import { createFileRoute } from '@tanstack/react-router'
+import {
+  useSystemInfo,
+  useServicesOverview,
+  useMachinesOverview,
+  usePackagesOverview,
+} from './_apis/index.ts'
+import { StatCard, Card, CardHeader, BarChart, ProgressGauge, TimeTracker, Badge, Button } from '@/components/ui/index.ts'
+
+export const Route = createFileRoute('/_app/dashboard/')({
+  component: DashboardPage,
+})
 
 function uptime(secs: number) {
   const d = Math.floor(secs / 86400)
@@ -20,11 +30,11 @@ const WEEK_BARS = [
   { label: 'S', value: 20 },
 ]
 
-export function DashboardPage() {
+function DashboardPage() {
   const { data: sys } = useSystemInfo()
-  const { data: servicesPage } = useSystemServices()
-  const { data: machinesPage } = useMachines()
-  const { data: pkgData } = usePackages()
+  const { data: servicesPage } = useServicesOverview()
+  const { data: machinesPage } = useMachinesOverview()
+  const { data: pkgData } = usePackagesOverview()
 
   const allServices = servicesPage?.items ?? []
   const activeServices = allServices.filter((s) => s.active_state === 'active').length

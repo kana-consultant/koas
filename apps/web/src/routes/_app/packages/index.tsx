@@ -1,19 +1,24 @@
 import { useMemo } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 import { Download, Trash2, ArrowUpCircle, Loader2 } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { DataTable } from '@/components/ui'
-import { useTableState } from '@/libs/list'
+import { DataTable } from '@/components/ui/index.ts'
+import { useTableState } from '@/libs/list/index.ts'
 import {
-  usePackages,
+  usePackagesList,
   useInstallPackage,
   useRemovePackage,
   useUpgradePackages,
-  type Package,
-} from './packages/_apis'
+  type IPackage,
+} from './_apis/index.ts'
 
-export function PackagesPage() {
+export const Route = createFileRoute('/_app/packages/')({
+  component: PackagesPage,
+})
+
+function PackagesPage() {
   const [state, setState] = useTableState({ pageSize: 20 })
-  const { data, isLoading, isFetching, refetch } = usePackages(state)
+  const { data, isLoading, isFetching, refetch } = usePackagesList(state)
   const { mutate: install, isPending: installing } = useInstallPackage()
   const { mutate: remove, isPending: removing } = useRemovePackage()
   const { mutate: upgrade, isPending: upgrading } = useUpgradePackages()
@@ -22,7 +27,7 @@ export function PackagesPage() {
   const total = data?.total ?? 0
   const manager = data?.manager ?? ''
 
-  const columns = useMemo<ColumnDef<Package>[]>(() => [
+  const columns = useMemo<ColumnDef<IPackage>[]>(() => [
     {
       id: 'name',
       header: 'Package',
@@ -100,7 +105,7 @@ export function PackagesPage() {
           {' · '}{total} {state.search ? 'match' : 'installed'}{total !== 1 ? 'es' : ''}
         </p>
       )}
-      <DataTable<Package>
+      <DataTable<IPackage>
         columns={columns}
         data={items}
         total={total}

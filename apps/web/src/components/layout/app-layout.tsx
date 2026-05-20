@@ -4,9 +4,9 @@ import {
   LayoutDashboard, Server, Package, Activity, LogOut,
   Menu, X, Settings, HelpCircle, Bell, Mail, Cpu,
 } from 'lucide-react'
-import { clearToken } from '@/libs/auth'
-import { useSystemInfo } from '@/routes/dashboard/_apis'
-import { SearchInput } from '@/components/ui'
+import { clearToken } from '@/libs/auth/index.ts'
+import { useSystemInfo } from '@/routes/_app/_apis/system.ts'
+import { SearchInput } from '@/components/ui/index.ts'
 
 const NAV_MAIN = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },

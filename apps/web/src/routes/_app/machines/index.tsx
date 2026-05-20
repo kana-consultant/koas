@@ -1,10 +1,14 @@
 import { useMemo } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Plus, Trash2, Wifi, Loader2 } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { DataTable } from '@/components/ui'
-import { useTableState } from '@/libs/list'
-import { useMachines, useDeleteMachine, useTestMachine, type Machine } from './machines/_apis'
+import { DataTable } from '@/components/ui/index.ts'
+import { useTableState } from '@/libs/list/index.ts'
+import { useMachinesList, useDeleteMachine, useTestMachine, type IMachine } from './_apis/index.ts'
+
+export const Route = createFileRoute('/_app/machines/')({
+  component: MachinesPage,
+})
 
 function statusDot(status: string) {
   const map: Record<string, [string, string]> = {
@@ -22,17 +26,17 @@ function statusDot(status: string) {
   )
 }
 
-export function MachinesPage() {
+function MachinesPage() {
   const navigate = useNavigate()
   const [state, setState] = useTableState({ pageSize: 20 })
-  const { data, isLoading, isFetching, refetch } = useMachines(state)
+  const { data, isLoading, isFetching, refetch } = useMachinesList(state)
   const { mutate: deleteMachine, isPending: deleting } = useDeleteMachine()
   const { mutate: testMachine, isPending: testing } = useTestMachine()
 
   const items = data?.items ?? []
   const total = data?.total ?? 0
 
-  const columns = useMemo<ColumnDef<Machine>[]>(() => [
+  const columns = useMemo<ColumnDef<IMachine>[]>(() => [
     {
       id: 'name',
       header: 'Name',
@@ -134,7 +138,7 @@ export function MachinesPage() {
         </button>
       </div>
 
-      <DataTable<Machine>
+      <DataTable<IMachine>
         columns={columns}
         data={items}
         total={total}

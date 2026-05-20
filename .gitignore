@@ -7,6 +7,7 @@ Cargo.lock
 node_modules/
 apps/web/dist/
 apps/web/.vite/
+apps/web/src/route-tree.gen.ts
 **/tsconfig.tsbuildinfo
 
 # Runtime data
@@ -23,3 +24,6 @@ data/
 .DS_Store
 Thumbs.db
 /web/
+
+# Moon
+.moon/cache

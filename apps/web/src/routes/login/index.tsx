@@ -1,11 +1,18 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 import { Cpu, Eye, EyeOff } from 'lucide-react'
-import { useLogin } from './login/_apis'
-import { setToken } from '@/libs/auth'
-import { Button } from '@/components/ui'
+import { useLogin } from './_apis/index.ts'
+import { isAuthenticated, setToken } from '@/libs/auth/index.ts'
+import { Button } from '@/components/ui/index.ts'
 
-export function LoginPage() {
+export const Route = createFileRoute('/login/')({
+  beforeLoad: () => {
+    if (isAuthenticated()) throw redirect({ to: '/dashboard' })
+  },
+  component: LoginPage,
+})
+
+function LoginPage() {
   const navigate = useNavigate()
   const { mutate: login, isPending, error } = useLogin()
   const [form, setForm] = useState({ username: '', password: '' })
@@ -27,7 +34,6 @@ export function LoginPage() {
       style={{ background: 'var(--bg)' }}
     >
       <div className='w-full max-w-sm'>
-        {/* Logo */}
         <div className='mb-8 text-center'>
           <div
             className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl'
@@ -39,7 +45,6 @@ export function LoginPage() {
           <p className='mt-1 text-sm' style={{ color: 'var(--text-muted)' }}>Sign in to manage your servers</p>
         </div>
 
-        {/* Card */}
         <div className='rounded-2xl p-6' style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
           <form onSubmit={handleSubmit} className='space-y-4'>
             <div>

@@ -1,15 +1,19 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Loader2, Key, Lock } from 'lucide-react'
-import { useCreateMachine } from './machines/_apis'
+import { useCreateMachine, type ICreateMachineInput } from './_apis/index.ts'
 
-type AuthType = 'password' | 'key'
+export const Route = createFileRoute('/_app/machines/new')({
+  component: AddMachinePage,
+})
 
-export function AddMachinePage() {
+type TAuthType = 'password' | 'key'
+
+function AddMachinePage() {
   const navigate = useNavigate()
   const { mutate: create, isPending, error } = useCreateMachine()
 
-  const [authType, setAuthType] = useState<AuthType>('password')
+  const [authType, setAuthType] = useState<TAuthType>('password')
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -30,7 +34,7 @@ export function AddMachinePage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const tags = form.tags.split(',').map((t) => t.trim()).filter(Boolean)
-    const auth =
+    const auth: ICreateMachineInput['auth'] =
       authType === 'password'
         ? { type: 'password', password: form.password }
         : { type: 'key_file', path: form.key_path, passphrase: form.passphrase || null }
@@ -96,7 +100,7 @@ export function AddMachinePage() {
           <div>
             <p className='mb-1.5 text-sm font-medium' style={{ color: 'var(--text)' }}>Authentication</p>
             <div className='flex gap-2'>
-              {(['password', 'key'] as AuthType[]).map((t) => (
+              {(['password', 'key'] as TAuthType[]).map((t) => (
                 <button
                   key={t}
                   type='button'

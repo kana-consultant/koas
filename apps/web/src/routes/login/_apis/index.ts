@@ -1,10 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/libs/api/client'
+import { api } from '@/libs/api/client.ts'
+
+export interface ILoginInput {
+  username: string
+  password: string
+}
+
+export interface ILoginResponse {
+  token: string
+}
 
 export function useLogin() {
   return useMutation({
-    mutationFn: (creds: { username: string; password: string }) =>
-      api.post<{ token: string }>('/auth/login', creds).then((r) => r.data),
+    mutationFn: (creds: ILoginInput) =>
+      api.post<ILoginResponse>('/auth/login', creds).then((r) => r.data),
   })
 }
 

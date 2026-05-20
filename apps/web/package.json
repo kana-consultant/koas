@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "routes:generate": "tsr generate",
+    "routes:watch": "tsr watch",
+    "build": "pnpm routes:generate && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -19,6 +21,8 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/router-cli": "^1.82.0",
+    "@tanstack/router-plugin": "^1.82.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",

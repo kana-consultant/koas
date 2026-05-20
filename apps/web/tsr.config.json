@@ -1,0 +1,5 @@
+{
+  "routesDirectory": "./src/routes",
+  "generatedRouteTree": "./src/route-tree.gen.ts",
+  "routeFileIgnorePattern": "_(apis|components|hooks|data)(\\.|/|$)"
+}

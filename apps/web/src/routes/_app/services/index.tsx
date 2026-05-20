@@ -1,25 +1,29 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Play, Square, RotateCcw } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Badge, DataTable } from '@/components/ui'
-import { useTableState } from '@/libs/list'
-import { useSystemServices, useServiceAction, type ServiceInfo } from './services/_apis'
+import { Badge, DataTable } from '@/components/ui/index.ts'
+import { useTableState } from '@/libs/list/index.ts'
+import { useServicesList, useServiceAction, type IServiceInfo } from './_apis/index.ts'
+
+export const Route = createFileRoute('/_app/services/')({
+  component: ServicesPage,
+})
 
 const STATE_FILTERS = ['all', 'active', 'inactive', 'failed'] as const
-type StateFilter = typeof STATE_FILTERS[number]
+type TStateFilter = typeof STATE_FILTERS[number]
 
-export function ServicesPage() {
+function ServicesPage() {
   const navigate = useNavigate()
   const [state, setState] = useTableState({ pageSize: 20 })
-  const [stateFilter, setStateFilter] = useState<StateFilter>('all')
-  const { data, isLoading, isFetching } = useSystemServices(state, stateFilter === 'all' ? undefined : stateFilter)
+  const [stateFilter, setStateFilter] = useState<TStateFilter>('all')
+  const { data, isLoading, isFetching } = useServicesList(state, stateFilter === 'all' ? undefined : stateFilter)
   const { mutate: action } = useServiceAction()
 
   const items = data?.items ?? []
   const total = data?.total ?? 0
 
-  const columns = useMemo<ColumnDef<ServiceInfo>[]>(() => [
+  const columns = useMemo<ColumnDef<IServiceInfo>[]>(() => [
     {
       id: 'name',
       header: 'Service',
@@ -93,7 +97,7 @@ export function ServicesPage() {
   )
 
   return (
-    <DataTable<ServiceInfo>
+    <DataTable<IServiceInfo>
       columns={columns}
       data={items}
       total={total}

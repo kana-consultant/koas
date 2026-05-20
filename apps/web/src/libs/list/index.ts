@@ -1,22 +1,24 @@
 import { useState } from 'react'
-import type { DataTableState } from '@/components/ui/DataTable'
+import type { IDataTableState } from '@/components/ui/data-table.tsx'
 
-export interface ListParams {
+export type { IDataTableState }
+
+export interface IListParams {
   page: number
   page_size: number
   sort?: string
   search?: string
 }
 
-export interface Page<T> {
+export interface IPage<T> {
   items: T[]
   total: number
   page: number
   page_size: number
 }
 
-export function toListParams(state: DataTableState): ListParams {
-  const params: ListParams = {
+export function toListParams(state: IDataTableState): IListParams {
+  const params: IListParams = {
     page: state.pageIndex + 1,
     page_size: state.pageSize,
   }
@@ -29,12 +31,12 @@ export function toListParams(state: DataTableState): ListParams {
   return params
 }
 
-export const defaultTableState: DataTableState = {
+export const defaultTableState: IDataTableState = {
   pageIndex: 0,
   pageSize: 20,
   search: '',
 }
 
-export function useTableState(initial: Partial<DataTableState> = {}) {
-  return useState<DataTableState>({ ...defaultTableState, ...initial })
+export function useTableState(initial: Partial<IDataTableState> = {}) {
+  return useState<IDataTableState>({ ...defaultTableState, ...initial })
 }

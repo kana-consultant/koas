@@ -1,8 +1,12 @@
-import { useParams, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { ArrowLeft, Play, Square, RotateCcw, RefreshCw } from 'lucide-react'
-import { useServiceDetail, useServiceAction, useServiceLogs } from './services.$name/_apis'
+import { useServiceDetail, useServiceAction, useServiceLogs } from './_apis/index.ts'
 
-function StatRow({ label, value }: { label: string; value: string }) {
+export const Route = createFileRoute('/_app/services/$name')({
+  component: ServiceDetailPage,
+})
+
+function StatRow({ label, value }: { label: string; value?: string }) {
   return (
     <div className='flex items-start justify-between gap-4 py-2.5' style={{ borderBottom: '1px solid var(--border)' }}>
       <span className='text-xs font-medium' style={{ color: 'var(--text-muted)' }}>{label}</span>
@@ -27,14 +31,14 @@ function badge(state: string) {
   )
 }
 
-export function ServiceDetailPage() {
-  const { name } = useParams({ from: '/app/services/$name' as any })
+function ServiceDetailPage() {
+  const { name } = Route.useParams()
   const navigate = useNavigate()
   const { data: svc, isLoading, refetch } = useServiceDetail(name)
   const { mutate: action, isPending } = useServiceAction()
   const { data: logs } = useServiceLogs(name)
 
-  const s = svc as any
+  const s = svc
 
   return (
     <div className='space-y-4'>
@@ -112,8 +116,8 @@ export function ServiceDetailPage() {
             className='overflow-y-auto rounded-lg p-3 font-mono text-[11px] leading-relaxed'
             style={{ background: 'var(--bg)', maxHeight: '320px', color: 'var(--text-muted)' }}
           >
-            {(logs as any[])?.length ? (
-              (logs as any[]).map((entry: any, i: number) => (
+            {logs?.length ? (
+              logs.map((entry, i) => (
                 <div key={i} className='flex gap-3'>
                   <span className='shrink-0 opacity-50'>{entry.timestamp}</span>
                   <span style={{ color: entry.level === 'error' ? 'var(--danger)' : 'var(--text-muted)' }}>{entry.message}</span>

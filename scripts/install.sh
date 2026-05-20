@@ -6,15 +6,12 @@ INSTALL_DIR="/usr/local/bin"
 SERVICE_USER="koas"
 DATA_DIR="/var/lib/koas"
 
-# -- helpers --
 info()  { echo -e "\033[32m[koas]\033[0m $*"; }
 warn()  { echo -e "\033[33m[koas]\033[0m $*"; }
 error() { echo -e "\033[31m[koas]\033[0m $*" >&2; exit 1; }
 
-# -- root check --
 [ "$(id -u)" -eq 0 ] || error "Run as root: sudo bash install.sh"
 
-# -- detect arch --
 ARCH=$(uname -m)
 case "$ARCH" in
   x86_64)  TARGET="x86_64-unknown-linux-musl" ;;
@@ -22,12 +19,10 @@ case "$ARCH" in
   *)       error "Unsupported architecture: $ARCH" ;;
 esac
 
-# -- get latest version --
 VERSION=$(curl -fsSL "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
 [ -n "$VERSION" ] || error "Could not fetch latest version"
 info "Installing koas $VERSION ($TARGET)"
 
-# -- download --
 URL="https://github.com/$REPO/releases/download/$VERSION/koas-${TARGET}.tar.gz"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
@@ -37,17 +32,14 @@ tar -xzf "$TMP/koas.tar.gz" -C "$TMP"
 install -m 755 "$TMP/koas-${TARGET}" "$INSTALL_DIR/koas"
 info "Binary installed to $INSTALL_DIR/koas"
 
-# -- create user --
 if ! id "$SERVICE_USER" &>/dev/null; then
   useradd -r -s /bin/false -d "$DATA_DIR" "$SERVICE_USER"
   info "Created user: $SERVICE_USER"
 fi
 
-# -- data dir --
 mkdir -p "$DATA_DIR"
 chown "$SERVICE_USER:$SERVICE_USER" "$DATA_DIR"
 
-# -- credentials --
 if [ ! -f /etc/koas/env ]; then
   mkdir -p /etc/koas
   echo ""
@@ -66,7 +58,6 @@ EOF
   info "Credentials saved to /etc/koas/env"
 fi
 
-# -- systemd service --
 cat > /etc/systemd/system/koas.service <<EOF
 [Unit]
 Description=koas — Server Management
@@ -90,7 +81,6 @@ systemctl enable koas
 systemctl restart koas
 info "koas service started"
 
-# -- done --
 PORT=$(grep KOAS_PORT /etc/koas/env 2>/dev/null | cut -d= -f2 || echo 3000)
 echo ""
 info "Done! koas is running at http://$(hostname -I | awk '{print $1}'):${PORT}"

@@ -1,9 +1,8 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
-import { api } from '@/libs/api/client'
-import { toListParams, type Page } from '@/libs/list'
-import type { DataTableState } from '@/components/ui/DataTable'
+import { api } from '@/libs/api/client.ts'
+import { toListParams, type IPage, type IDataTableState } from '@/libs/list/index.ts'
 
-export interface Machine {
+export interface IMachine {
   id: string
   name: string
   description?: string | null
@@ -17,17 +16,27 @@ export interface Machine {
   updated_at: string
 }
 
+export interface ICreateMachineInput {
+  name: string
+  description?: string | null
+  host: string
+  port: number
+  username: string
+  auth: { type: 'password'; password: string } | { type: 'key_file'; path: string; passphrase: string | null }
+  tags: string[]
+}
+
 export const machineKeys = {
   all: () => ['machines'] as const,
   list: (params?: unknown) => [...machineKeys.all(), 'list', params] as const,
-  detail: (id: string) => [...machineKeys.all(), id] as const,
+  detail: (id: string) => [...machineKeys.all(), 'detail', id] as const,
 }
 
-export function useMachines(state: DataTableState) {
+export function useMachinesList(state: IDataTableState) {
   const params = toListParams(state)
   return useQuery({
     queryKey: machineKeys.list(params),
-    queryFn: () => api.get<Page<Machine>>('/machines', { params }).then((r) => r.data),
+    queryFn: () => api.get<IPage<IMachine>>('/machines', { params }).then((r) => r.data),
     placeholderData: keepPreviousData,
   })
 }
@@ -35,7 +44,8 @@ export function useMachines(state: DataTableState) {
 export function useCreateMachine() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (data: unknown) => api.post('/machines', data).then((r) => r.data),
+    mutationFn: (data: ICreateMachineInput) =>
+      api.post<IMachine>('/machines', data).then((r) => r.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: machineKeys.all() }),
   })
 }

@@ -9,9 +9,9 @@ import {
   type SortingState,
 } from '@tanstack/react-table'
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight } from 'lucide-react'
-import { SearchInput } from './SearchInput'
+import { SearchInput } from './search-input.tsx'
 
-export interface DataTableState {
+export interface IDataTableState {
   pageIndex: number
   pageSize: number
   sortField?: string
@@ -19,12 +19,12 @@ export interface DataTableState {
   search: string
 }
 
-interface DataTableProps<T> {
+interface IDataTableProps<T> {
   columns: ColumnDef<T, any>[]
   data: T[]
   total: number
-  state: DataTableState
-  onStateChange: (next: DataTableState) => void
+  state: IDataTableState
+  onStateChange: (next: IDataTableState) => void
   isLoading?: boolean
   isFetching?: boolean
   searchPlaceholder?: string
@@ -49,7 +49,7 @@ export function DataTable<T>({
   onRowClick,
   toolbar,
   pageSizeOptions = [10, 20, 50, 100],
-}: DataTableProps<T>) {
+}: IDataTableProps<T>) {
   const [searchDraft, setSearchDraft] = useState(state.search)
 
   useEffect(() => {
