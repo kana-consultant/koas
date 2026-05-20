@@ -1,6 +1,5 @@
 import { Video } from 'lucide-react'
-import { useSystemInfo, useSystemServices, useMachines } from './dashboard/_apis'
-import { usePackages } from './packages/_apis'
+import { useSystemInfo, useSystemServices, useMachines, usePackages } from './dashboard/_apis'
 import { StatCard, Card, CardHeader, BarChart, ProgressGauge, TimeTracker, Badge, Button } from '@/components/ui'
 
 function uptime(secs: number) {
@@ -23,15 +22,17 @@ const WEEK_BARS = [
 
 export function DashboardPage() {
   const { data: sys } = useSystemInfo()
-  const { data: services } = useSystemServices()
-  const { data: machines } = useMachines()
+  const { data: servicesPage } = useSystemServices()
+  const { data: machinesPage } = useMachines()
   const { data: pkgData } = usePackages()
 
-  const allServices = (services as any[]) ?? []
+  const allServices = servicesPage?.items ?? []
   const activeServices = allServices.filter((s) => s.active_state === 'active').length
   const failedServices = allServices.filter((s) => s.active_state === 'failed').length
-  const totalServices = allServices.length
+  const totalServices = servicesPage?.total ?? allServices.length
   const uptimePct = totalServices > 0 ? Math.round((activeServices / totalServices) * 100) : 0
+  const machines = machinesPage?.items ?? []
+  const totalMachines = machinesPage?.total ?? machines.length
 
   return (
     <div className='space-y-5'>
@@ -39,23 +40,23 @@ export function DashboardPage() {
       <div className='grid gap-4 grid-cols-2 lg:grid-cols-4'>
         <StatCard
           label='Total Services'
-          value={services ? String(totalServices) : '—'}
+          value={servicesPage ? String(totalServices) : '—'}
           trend='Increased from last boot'
           dark
         />
         <StatCard
           label='Active Services'
-          value={services ? String(activeServices) : '—'}
+          value={servicesPage ? String(activeServices) : '—'}
           trend='Increased from last month'
         />
         <StatCard
           label='Packages'
-          value={(pkgData as any)?.packages?.length != null ? String((pkgData as any).packages.length) : '—'}
-          trend={`via ${(pkgData as any)?.manager ?? 'manager'}`}
+          value={pkgData ? String(pkgData.total) : '—'}
+          trend={`via ${pkgData?.manager ?? 'manager'}`}
         />
         <StatCard
           label='Machines'
-          value={machines ? String((machines as any[]).length) : '—'}
+          value={machinesPage ? String(totalMachines) : '—'}
           trend='registered via SSH'
         />
       </div>
@@ -139,9 +140,9 @@ export function DashboardPage() {
           <CardHeader title='Machines' action={
             <Button variant='outline' size='sm'>+ Add Machine</Button>
           } />
-          {(machines as any[])?.length > 0 ? (
+          {machines.length > 0 ? (
             <div className='space-y-2'>
-              {(machines as any[]).slice(0, 5).map((m: any) => (
+              {machines.slice(0, 5).map((m) => (
                 <div key={m.id} className='flex items-center gap-3 rounded-2xl px-3 py-2.5' style={{ background: 'var(--bg-elevated)' }}>
                   <div className='h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold' style={{ background: 'var(--accent-soft)', color: 'var(--accent)' }}>
                     {(m.name?.[0] ?? 'M').toUpperCase()}

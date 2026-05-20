@@ -1,24 +1,30 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { api } from '@/libs/api/client'
+import { toListParams, type Page } from '@/libs/list'
+import type { DataTableState } from '@/components/ui/DataTable'
+
+export interface Package {
+  name: string
+  version: string
+  description?: string | null
+  installed: boolean
+}
+
+export interface PackagesPage extends Page<Package> {
+  manager: string
+}
 
 export const packageKeys = {
   all: () => ['packages'] as const,
-  installed: () => [...packageKeys.all(), 'installed'] as const,
-  search: (q: string) => [...packageKeys.all(), 'search', q] as const,
+  list: (params?: unknown) => [...packageKeys.all(), 'list', params] as const,
 }
 
-export function usePackages() {
+export function usePackages(state: DataTableState) {
+  const params = toListParams(state)
   return useQuery({
-    queryKey: packageKeys.installed(),
-    queryFn: () => api.get('/system/packages').then((r) => r.data),
-  })
-}
-
-export function usePackageSearch(q: string) {
-  return useQuery({
-    queryKey: packageKeys.search(q),
-    queryFn: () => api.get('/system/packages/search', { params: { q } }).then((r) => r.data.results),
-    enabled: q.length > 1,
+    queryKey: packageKeys.list(params),
+    queryFn: () => api.get<PackagesPage>('/system/packages', { params }).then((r) => r.data),
+    placeholderData: keepPreviousData,
   })
 }
 

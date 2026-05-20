@@ -1,27 +1,50 @@
 use axum::{extract::{Path, Query}, Json};
-use serde::Deserialize;
 use std::sync::Arc;
 use crate::application::packages::{InstallPackageUseCase, ListPackagesUseCase, RemovePackageUseCase, SearchPackagesUseCase, UpgradePackagesUseCase};
+use crate::domain::packages::Package;
 use crate::infrastructure::os::detect_os;
 use crate::infrastructure::packages::PackageManager;
 use crate::presentation::error::{ApiError, ApiResult};
+use crate::presentation::list_params::{ListParams, Page, SortSpec};
 
-#[derive(Deserialize)]
-pub struct SearchQuery { pub q: String }
-
-pub async fn list_packages() -> ApiResult<Json<serde_json::Value>> {
+pub async fn list_packages(
+    Query(params): Query<ListParams>,
+) -> ApiResult<Json<serde_json::Value>> {
     let os = detect_os().await;
     let repo: Arc<dyn crate::domain::packages::PackageRepository> = Arc::new(PackageManager::for_os(&os.family));
-    let uc = ListPackagesUseCase::new(repo);
-    let packages = uc.execute().await.map_err(ApiError::from)?;
-    Ok(Json(serde_json::json!({ "packages": packages, "manager": uc.manager_name() })))
+    let list_uc = ListPackagesUseCase::new(repo.clone());
+    let manager_name = list_uc.manager_name().to_string();
+
+    let rows = match params.search_term() {
+        Some(term) => SearchPackagesUseCase::new(repo)
+            .execute(term)
+            .await
+            .map_err(ApiError::from)?,
+        None => list_uc.execute().await.map_err(ApiError::from)?,
+    };
+
+    let page = Page::paginate(rows, &params, package_matches, package_compare);
+    let mut value = serde_json::to_value(&page).unwrap();
+    value["manager"] = serde_json::Value::String(manager_name);
+    Ok(Json(value))
 }
 
-pub async fn search_packages(Query(q): Query<SearchQuery>) -> ApiResult<Json<serde_json::Value>> {
-    let os = detect_os().await;
-    let repo: Arc<dyn crate::domain::packages::PackageRepository> = Arc::new(PackageManager::for_os(&os.family));
-    let results = SearchPackagesUseCase::new(repo).execute(&q.q).await.map_err(ApiError::from)?;
-    Ok(Json(serde_json::json!({ "results": results })))
+fn package_matches(p: &Package, needle: &str) -> bool {
+    p.name.to_lowercase().contains(needle)
+        || p.version.to_lowercase().contains(needle)
+        || p.description
+            .as_deref()
+            .map(|d| d.to_lowercase().contains(needle))
+            .unwrap_or(false)
+}
+
+fn package_compare(a: &Package, b: &Package, spec: SortSpec<'_>) -> std::cmp::Ordering {
+    match spec.field {
+        "name" => spec.apply(a.name.as_str(), b.name.as_str()),
+        "version" => spec.apply(a.version.as_str(), b.version.as_str()),
+        "installed" => spec.apply(a.installed, b.installed),
+        _ => spec.apply(a.name.as_str(), b.name.as_str()),
+    }
 }
 
 pub async fn install_package(Json(body): Json<serde_json::Value>) -> ApiResult<Json<serde_json::Value>> {

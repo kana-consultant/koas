@@ -10,7 +10,7 @@ use koas_api::presentation::{
     routers::{
         health::health_check,
         machines::{create_machine, delete_machine, get_machine, list_machines, test_machine, update_machine},
-        packages::{install_package, list_packages, remove_package, search_packages, upgrade_packages},
+        packages::{install_package, list_packages, remove_package, upgrade_packages},
         system::{get_local_service, get_local_service_logs, get_system_info, list_local_services, local_service_action},
     },
 };
@@ -66,7 +66,6 @@ pub fn create_router(state: AppState) -> Router {
         .route("/system/services/{service}/action", post(local_service_action))
         .route("/system/services/{service}/logs", get(get_local_service_logs))
         .route("/system/packages", get(list_packages))
-        .route("/system/packages/search", get(search_packages))
         .route("/system/packages", post(install_package))
         .route("/system/packages/{name}", delete(remove_package))
         .route("/system/packages/upgrade", post(upgrade_packages))
