@@ -1,5 +1,5 @@
 [workspace]
-members = ["apps/api", "apps/gateway"]
+members = ["apps/api", "apps/gateway", "apps/installer"]
 resolver = "2"
 
 [workspace.package]

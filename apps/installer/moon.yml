@@ -1,0 +1,17 @@
+$schema: 'https://moonrepo.dev/schemas/project.json'
+
+project:
+  name: 'installer'
+  description: 'koas installer — single binary that provisions the koas systemd service on a VPS'
+  language: 'rust'
+  type: 'application'
+
+tasks:
+  check:
+    command: 'cargo check -p koas-installer'
+
+  build:
+    command: 'cargo build --bin koas-install'
+
+  clippy:
+    command: 'cargo clippy -p koas-installer -- -D warnings'
